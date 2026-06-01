@@ -1,0 +1,9 @@
+# Claude 配置
+.claude/
+
+# Git
+.git/
+
+# OS files
+Thumbs.db
+.DS_Store

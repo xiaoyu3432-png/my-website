@@ -1,0 +1,2125 @@
+<!doctype html>
+<html lang="zh-CN"><head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Mr.Xu — Java全栈工程师</title>
+  <style>
+    /* ===================================================
+       DESIGN SYSTEM — Airtable conventions + warm accent
+       Dark canvas, copper/orange accent, monospace details
+       =================================================== */
+    :root {
+      --bg:       #0d0f12;
+      --bg-alt:   #12151a;
+      --surface:  #171b22;
+      --surface-hover: #1d2229;
+      --fg:       #e8eaed;
+      --fg-2:     #9aa0a8;
+      --muted:    #636b76;
+      --border:   #252a32;
+      --border-hover: #363d47;
+      --accent:   #e07a4f;
+      --accent-2: #c96a42;
+      --accent-soft: rgba(224, 122, 79, 0.12);
+      --accent-glow: rgba(224, 122, 79, 0.25);
+      --green:    #34d399;
+      --green-soft: rgba(52, 211, 153, 0.12);
+
+      --font-display: 'Inter', -apple-system, BlinkMacSystemFont, 'SF Pro Display', system-ui, sans-serif;
+      --font-body:    'Inter', -apple-system, BlinkMacSystemFont, 'SF Pro Text', system-ui, sans-serif;
+      --font-mono:    'JetBrains Mono', 'SF Mono', 'Fira Code', ui-monospace, monospace;
+
+      --nav-h: 64px;
+      --section-pad: clamp(72px, 10vw, 120px);
+      --content-w: 1080px;
+      --radius: 14px;
+      --radius-sm: 10px;
+      --radius-xs: 6px;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html {
+      scroll-behavior: smooth;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    body {
+      font: 15px/1.6 var(--font-body);
+      color: var(--fg);
+      background: var(--bg);
+      overflow-x: hidden;
+      transition: background 0.4s ease, color 0.4s ease;
+    }
+
+    /* ─── LIGHT MODE ─── */
+    body.light {
+      --bg:       #f5f5f0;
+      --bg-alt:   #eceae4;
+      --surface:  #ffffff;
+      --surface-hover: #f0eeea;
+      --fg:       #1a1a1a;
+      --fg-2:     #555550;
+      --muted:    #888880;
+      --border:   #d8d5cc;
+      --border-hover: #b8b5ac;
+      --accent:   #c96a42;
+      --accent-2: #a85535;
+      --accent-soft: rgba(201, 106, 66, 0.1);
+      --accent-glow: rgba(201, 106, 66, 0.2);
+      --green:    #16a34a;
+      --green-soft: rgba(22, 163, 74, 0.1);
+    }
+    body.light .nav {
+      background: rgba(245, 245, 240, 0.88);
+      border-bottom-color: var(--border);
+    }
+    body.light .nav.scrolled {
+      box-shadow: 0 2px 24px rgba(0,0,0,0.08);
+    }
+    body.light .hero-bg {
+      background:
+        radial-gradient(ellipse 70% 50% at 65% 35%, var(--accent-soft), transparent),
+        radial-gradient(ellipse 40% 40% at 15% 75%, rgba(22, 163, 74, 0.04), transparent);
+    }
+    body.light .hero-grid {
+      background-image:
+        linear-gradient(rgba(0,0,0,0.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0,0,0,0.04) 1px, transparent 1px);
+    }
+    body.light .terminal-bar { background: var(--bg-alt); }
+    body.light .modal-overlay { background: rgba(0, 0, 0, 0.4); }
+    body.light .modal-close { background: rgba(0,0,0,0.15); }
+    body.light .modal-close:hover { background: rgba(0,0,0,0.25); }
+    body.light .back-to-top { box-shadow: 0 4px 20px rgba(0,0,0,0.1); }
+    body.light .back-to-top:hover { box-shadow: 0 4px 24px var(--accent-glow); }
+    body.light .modal { box-shadow: 0 40px 100px rgba(0,0,0,0.15); }
+    body.light .project-card:hover { box-shadow: 0 12px 40px rgba(0,0,0,0.08); }
+    body.light .floating-orb { opacity: 0.04; }
+    body.light .project-visual { background: linear-gradient(135deg, #f0efe8, #e8e6df) !important; }
+    body.light .project-visual .grid-pattern { opacity: 0.04; }
+    body.light .project-visual .icon-bg { opacity: 0.8; }
+    body.light .project-card { background: #fff; border-color: #e0ddd4; }
+    body.light .project-card:hover { border-color: #c96a42; box-shadow: 0 12px 40px rgba(0,0,0,0.06); }
+    body.light .project-body h3 { color: #1a1a1a; }
+    body.light .project-body p { color: #555; }
+    body.light .project-stack span { background: #f0efe8; color: #555; border-color: #e0ddd4; }
+    body.light .project-stat { background: rgba(201,106,66,0.08); color: #a85535; }
+    body.light .modal-header { color: #1a1a1a; }
+    body.light .modal-header-bg .grid-pattern {
+      background-image:
+        linear-gradient(rgba(27,54,93,0.12) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(27,54,93,0.12) 1px, transparent 1px);
+    }
+    body.light .modal-close { background: rgba(0,0,0,0.08); color: #1a1a1a; border-color: rgba(0,0,0,0.1); }
+    body.light .modal-close:hover { background: rgba(0,0,0,0.15); }
+    body.light .modal-project-name { color: #1a1a1a; }
+    body.light .modal-project-sub { color: #666; }
+    body.light .modal-section-title { color: var(--accent); }
+    body.light .modal-desc { color: #444; }
+    body.light .modal-desc strong { color: #1a1a1a; }
+    body.light .modal-metric { background: #f0efe8; border-color: #e0ddd4; }
+    body.light .modal-metric-val { color: var(--accent); }
+    body.light .modal-metric-label { color: #666; }
+    body.light .modal-code { background: #1e2028; }
+    body.light .modal-stack-tag { background: #e8e6df; color: #444; border-color: #d8d5cc; }
+    body.light .modal-stack-tag:hover { border-color: var(--accent); color: var(--accent); }
+    body.light .modal-features li { color: #444; }
+    body.light .modal-features li strong { color: #1a1a1a; }
+    body.light .modal-link { background: #1a1a1a; color: #fff; }
+    body.light .modal-link:hover { background: var(--accent); box-shadow: 0 4px 20px var(--accent-glow); }
+    body.light .modal { background: #fff; border-color: #e0ddd4; }
+    body.light .modal-body { color: #444; }
+    body.light .modal-body::-webkit-scrollbar-thumb { background: #d8d5cc; }
+    body.light .section-tag { color: #c96a42; }
+    body.light .terminal-bar { background: #f0efe8; }
+    body.light .terminal-body { color: #555; }
+    body.light .terminal-body .key { color: #c96a42; }
+    body.light .terminal-body .str { color: #16a34a; }
+    body.light .terminal-body .num { color: #f59e0b; }
+    body.light .hero-status { background: rgba(201,106,66,0.08); color: #c96a42; border-color: rgba(201,106,66,0.15); }
+    body.light .btn-primary { background: #c96a42; color: #fff; }
+    body.light .btn-primary:hover { box-shadow: 0 0 24px rgba(201,106,66,0.2); }
+    body.light .btn-ghost { color: #1a1a1a; border-color: #d8d5cc; }
+    body.light .btn-ghost:hover { background: rgba(0,0,0,0.04); border-color: #aaa; }
+    body.light .stat-card { background: #fff; border-color: #e0ddd4; }
+    body.light .stat-card:hover { border-color: #c96a42; }
+    body.light .stat-num { color: #c96a42; }
+    body.light .stat-label { color: #888; }
+    body.light .skill-card { background: #fff; border-color: #e0ddd4; }
+    body.light .skill-tag { background: #f0efe8; color: #555; border-color: #e0ddd4; }
+    body.light .experience-card { background: #fff; border-color: #e0ddd4; }
+    body.light .exp-company { color: #1a1a1a; }
+    body.light .exp-role { color: #555; }
+    body.light .exp-desc { color: #666; }
+    body.light .exp-tech span { background: #f0efe8; color: #555; border-color: #e0ddd4; }
+    body.light .contact-link { background: #fff; border-color: #e0ddd4; color: #1a1a1a; }
+    body.light .contact-link:hover { border-color: var(--accent); color: var(--accent); }
+    body.light .hero h1 { color: #1a1a1a; }
+    body.light .hero-sub { color: #666; }
+    body.light .section-title { color: #1a1a1a; }
+    body.light .section-desc { color: #666; }
+
+    ::selection {
+      background: var(--accent);
+      color: #fff;
+    }
+
+    a {
+      color: var(--accent);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+    a:hover { color: var(--accent-2); }
+
+    /* ─── NAVIGATION ─── */
+    .nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      height: var(--nav-h);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 clamp(20px, 4vw, 48px);
+      background: rgba(13, 15, 18, 0.88);
+      backdrop-filter: blur(20px) saturate(1.4);
+      -webkit-backdrop-filter: blur(20px) saturate(1.4);
+      border-bottom: 1px solid var(--border);
+      z-index: 100;
+      transition: box-shadow 0.3s;
+    }
+    .nav.scrolled {
+      box-shadow: 0 2px 24px rgba(0,0,0,0.4);
+    }
+    .nav-logo {
+      font: 700 18px/1 var(--font-mono);
+      letter-spacing: -0.02em;
+      color: var(--fg);
+    }
+    .nav-logo span { color: var(--accent); }
+    .nav-links {
+      display: flex;
+      gap: 28px;
+      list-style: none;
+    }
+    .nav-links a {
+      font: 500 13px/1 var(--font-body);
+      color: var(--muted);
+      letter-spacing: 0.02em;
+      transition: color 0.2s;
+      position: relative;
+    }
+    .nav-links a::after {
+      content: '';
+      position: absolute;
+      bottom: -4px; left: 0;
+      width: 0; height: 2px;
+      background: var(--accent);
+      border-radius: 1px;
+      transition: width 0.25s ease;
+    }
+    .nav-links a:hover { color: var(--fg); }
+    .nav-links a:hover::after { width: 100%; }
+
+    .nav-toggle {
+      display: none;
+      background: none; border: none;
+      color: var(--fg);
+      font-size: 22px;
+      cursor: pointer;
+      padding: 8px;
+    }
+
+    /* ─── HERO ─── */
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 0 clamp(20px, 6vw, 72px);
+      position: relative;
+      overflow: hidden;
+    }
+    .hero-bg {
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 70% 50% at 65% 35%, var(--accent-soft), transparent),
+        radial-gradient(ellipse 40% 40% at 15% 75%, rgba(52, 211, 153, 0.04), transparent);
+      pointer-events: none;
+    }
+    .hero-grid {
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(255,255,255,0.018) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.018) 1px, transparent 1px);
+      background-size: 64px 64px;
+      mask-image: radial-gradient(ellipse 65% 55% at 55% 45%, black, transparent);
+      -webkit-mask-image: radial-gradient(ellipse 65% 55% at 55% 45%, black, transparent);
+      pointer-events: none;
+    }
+    .hero-content {
+      position: relative;
+      max-width: var(--content-w);
+      margin: 0 auto;
+      width: 100%;
+    }
+    .hero-status {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font: 500 12px/1 var(--font-mono);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--green);
+      margin-bottom: 20px;
+      padding: 6px 14px;
+      background: var(--green-soft);
+      border: 1px solid rgba(52, 211, 153, 0.2);
+      border-radius: 100px;
+    }
+    .hero-status .dot {
+      width: 7px; height: 7px;
+      border-radius: 50%;
+      background: var(--green);
+      animation: pulse 2s ease infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.4; transform: scale(0.7); }
+    }
+    .hero h1 {
+      font: 800 clamp(42px, 6.5vw, 72px)/1.08 var(--font-display);
+      letter-spacing: -0.035em;
+      margin-bottom: 14px;
+    }
+    .hero h1 .accent { color: var(--accent); }
+    .hero-sub {
+      font: 400 clamp(16px, 1.8vw, 19px)/1.6 var(--font-body);
+      color: var(--fg-2);
+      max-width: 520px;
+      margin-bottom: 36px;
+    }
+
+    /* Terminal */
+    .hero-terminal {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 0;
+      max-width: 520px;
+      font: 13px/1.75 var(--font-mono);
+      color: var(--muted);
+      position: relative;
+      overflow: hidden;
+    }
+    .terminal-bar {
+      height: 34px;
+      background: var(--bg-alt);
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      padding: 0 14px;
+      gap: 6px;
+    }
+    .terminal-dot { width: 10px; height: 10px; border-radius: 50%; }
+    .terminal-dot.r { background: #ff5f57; }
+    .terminal-dot.y { background: #febc2e; }
+    .terminal-dot.g { background: #28c840; }
+    .terminal-body { padding: 16px 18px; }
+    .terminal-line {
+      opacity: 0;
+      animation: fadeIn 0.4s ease forwards;
+    }
+    .terminal-line .prompt { color: var(--accent); }
+    .terminal-line .cmd { color: var(--fg); }
+    .terminal-line .comment { color: #4a5260; }
+    .terminal-line .key { color: var(--accent); }
+    .terminal-line .str { color: var(--green); }
+    .terminal-line .num { color: #f0b866; }
+    .cursor {
+      display: inline-block;
+      width: 7px; height: 14px;
+      background: var(--accent);
+      margin-left: 2px;
+      animation: blink 1s step-end infinite;
+      vertical-align: text-bottom;
+    }
+    @keyframes blink { 50% { opacity: 0; } }
+    @keyframes fadeIn { to { opacity: 1; } }
+
+    .hero-actions {
+      display: flex;
+      gap: 12px;
+      margin-top: 32px;
+      flex-wrap: wrap;
+    }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 12px 24px;
+      border-radius: var(--radius-sm);
+      font: 600 14px/1 var(--font-body);
+      letter-spacing: 0.01em;
+      cursor: pointer;
+      border: none;
+      transition: all 0.2s;
+    }
+    .btn-primary {
+      background: var(--accent);
+      color: #fff;
+    }
+    .btn-primary:hover {
+      background: var(--accent-2);
+      box-shadow: 0 0 20px var(--accent-glow), 0 4px 16px rgba(0,0,0,0.3);
+      transform: translateY(-1px);
+    }
+    .btn-ghost {
+      background: transparent;
+      color: var(--fg);
+      border: 1px solid var(--border);
+    }
+    .btn-ghost:hover {
+      border-color: var(--border-hover);
+      background: var(--surface);
+    }
+
+    /* ─── SECTIONS ─── */
+    section {
+      padding: var(--section-pad) clamp(20px, 6vw, 72px);
+      max-width: var(--content-w);
+      margin: 0 auto;
+    }
+    .section-tag {
+      font: 600 11px/1 var(--font-mono);
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 10px;
+    }
+    .section-title {
+      font: 700 clamp(28px, 3.5vw, 40px)/1.15 var(--font-display);
+      letter-spacing: -0.025em;
+      margin-bottom: 12px;
+    }
+    .section-desc {
+      font: 400 15px/1.65 var(--font-body);
+      color: var(--fg-2);
+      max-width: 540px;
+      margin-bottom: 44px;
+    }
+
+    /* ─── ABOUT ─── */
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1.1fr 0.9fr;
+      gap: 56px;
+      align-items: start;
+    }
+    .about-text p {
+      margin-bottom: 18px;
+      color: var(--fg-2);
+      line-height: 1.75;
+      font-size: 15px;
+    }
+    .about-text p strong {
+      color: var(--fg);
+      font-weight: 600;
+    }
+    .about-stats {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+    .stat-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 24px;
+      transition: border-color 0.25s, transform 0.25s;
+    }
+    .stat-card:hover {
+      border-color: var(--border-hover);
+      transform: translateY(-2px);
+    }
+    .stat-num {
+      font: 800 32px/1 var(--font-display);
+      color: var(--accent);
+      margin-bottom: 4px;
+    }
+    .stat-label {
+      font: 500 12px/1.4 var(--font-mono);
+      color: var(--muted);
+      letter-spacing: 0.03em;
+    }
+
+    /* ─── SKILLS ─── */
+    .skills-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+      gap: 16px;
+    }
+    .skill-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 24px;
+      transition: border-color 0.25s, transform 0.25s;
+    }
+    .skill-card:hover {
+      border-color: var(--border-hover);
+      transform: translateY(-2px);
+    }
+    .skill-card h3 {
+      font: 600 14px/1 var(--font-body);
+      margin-bottom: 16px;
+      color: var(--fg);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .skill-icon {
+      width: 30px; height: 30px;
+      border-radius: var(--radius-xs);
+      background: var(--accent-soft);
+      display: grid;
+      place-items: center;
+      font-size: 14px;
+    }
+    .skill-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+    .skill-tag {
+      font: 500 12px/1 var(--font-mono);
+      padding: 6px 12px;
+      border-radius: 5px;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      color: var(--fg-2);
+      transition: all 0.2s;
+      letter-spacing: 0.02em;
+    }
+    .skill-tag:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+      background: var(--accent-soft);
+    }
+
+    /* ─── PROJECTS ─── */
+    .projects-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
+    .project-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      overflow: hidden;
+      transition: all 0.3s ease;
+      cursor: default;
+      position: relative;
+    }
+    .project-card:hover {
+      border-color: var(--border-hover);
+      transform: translateY(-3px);
+      box-shadow: 0 12px 40px rgba(0,0,0,0.25);
+    }
+    .project-visual {
+      height: 180px;
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .project-visual .icon-bg {
+      font-size: 48px;
+      opacity: 0.6;
+      position: relative;
+      z-index: 1;
+    }
+    .project-visual .grid-pattern {
+      position: absolute;
+      inset: 0;
+      opacity: 0.08;
+      background-image:
+        linear-gradient(var(--accent) 1px, transparent 1px),
+        linear-gradient(90deg, var(--accent) 1px, transparent 1px);
+      background-size: 32px 32px;
+    }
+    .project-body {
+      padding: 24px;
+    }
+    .project-body h3 {
+      font: 600 17px/1.3 var(--font-display);
+      margin-bottom: 8px;
+    }
+    .project-body p {
+      font: 400 13px/1.6 var(--font-body);
+      color: var(--fg-2);
+      margin-bottom: 14px;
+    }
+    .project-meta {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+    .project-stack {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 5px;
+    }
+    .project-stack span {
+      font: 500 10px/1 var(--font-mono);
+      padding: 4px 9px;
+      border-radius: 4px;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      color: var(--accent);
+      letter-spacing: 0.03em;
+    }
+    .project-stat {
+      font: 600 11px/1 var(--font-mono);
+      color: var(--green);
+      letter-spacing: 0.04em;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .project-stat::before {
+      content: '';
+      width: 5px; height: 5px;
+      border-radius: 50%;
+      background: var(--green);
+    }
+
+    /* ─── EXPERIENCE ─── */
+    .timeline {
+      position: relative;
+      padding-left: 28px;
+    }
+    .timeline::before {
+      content: '';
+      position: absolute;
+      top: 0; bottom: 0; left: 6px;
+      width: 2px;
+      background: var(--border);
+    }
+    .timeline-item {
+      position: relative;
+      padding-bottom: 36px;
+    }
+    .timeline-item:last-child { padding-bottom: 0; }
+    .timeline-item::before {
+      content: '';
+      position: absolute;
+      left: -26px; top: 5px;
+      width: 10px; height: 10px;
+      border-radius: 50%;
+      background: var(--bg);
+      border: 2px solid var(--border);
+      transition: all 0.3s;
+    }
+    .timeline-item.current::before {
+      background: var(--accent);
+      border-color: var(--accent);
+      box-shadow: 0 0 10px var(--accent-glow);
+    }
+    .timeline-header {
+      display: flex;
+      align-items: baseline;
+      gap: 12px;
+      margin-bottom: 4px;
+      flex-wrap: wrap;
+    }
+    .timeline-date {
+      font: 600 11px/1 var(--font-mono);
+      color: var(--accent);
+      letter-spacing: 0.06em;
+    }
+    .timeline-role {
+      font: 600 16px/1.3 var(--font-display);
+    }
+    .timeline-company {
+      font: 500 13px/1 var(--font-body);
+      color: var(--muted);
+      margin-bottom: 8px;
+    }
+    .timeline-desc {
+      font: 400 13px/1.7 var(--font-body);
+      color: var(--fg-2);
+      max-width: 480px;
+    }
+
+    /* ─── CONTACT ─── */
+    .contact-section {
+      text-align: center;
+      padding-bottom: 48px;
+    }
+    .contact-section .section-desc {
+      margin-left: auto;
+      margin-right: auto;
+    }
+    .contact-links {
+      display: flex;
+      justify-content: center;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-top: 8px;
+    }
+    .contact-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 14px 24px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      font: 500 14px/1 var(--font-body);
+      color: var(--fg);
+      transition: all 0.25s;
+    }
+    .contact-link:hover {
+      border-color: var(--accent);
+      background: var(--accent-soft);
+      color: var(--accent);
+      transform: translateY(-2px);
+    }
+    .contact-link svg {
+      width: 18px; height: 18px;
+      stroke: currentColor;
+      fill: none;
+      stroke-width: 2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    /* ─── FOOTER ─── */
+    .footer {
+      text-align: center;
+      padding: 32px clamp(20px, 6vw, 72px);
+      border-top: 1px solid var(--border);
+      font: 400 12px/1 var(--font-mono);
+      color: var(--muted);
+      letter-spacing: 0.04em;
+    }
+    .footer .heart { color: var(--accent); }
+
+    /* ─── FLOATING BACKGROUND ORBS ─── */
+    .floating-orbs {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 0;
+      overflow: hidden;
+    }
+    .floating-orb {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(80px);
+      opacity: 0.07;
+      will-change: transform;
+    }
+    .floating-orb:nth-child(1) {
+      width: 700px; height: 700px;
+      background: var(--accent);
+      top: 10%; left: -5%;
+      animation: orbDrift1 14s ease-in-out infinite alternate;
+    }
+    .floating-orb:nth-child(2) {
+      width: 580px; height: 580px;
+      background: var(--green);
+      top: 50%; right: -8%;
+      animation: orbDrift2 18s ease-in-out infinite alternate;
+    }
+    .floating-orb:nth-child(3) {
+      width: 500px; height: 500px;
+      background: #818cf8;
+      bottom: 5%; left: 30%;
+      animation: orbDrift3 12s ease-in-out infinite alternate;
+    }
+    @keyframes orbDrift1 {
+      0%   { transform: translate(0, 0) scale(1); }
+      50%  { transform: translate(60px, 40px) scale(1.1); }
+      100% { transform: translate(-30px, 80px) scale(0.95); }
+    }
+    @keyframes orbDrift2 {
+      0%   { transform: translate(0, 0) scale(1); }
+      50%  { transform: translate(-50px, -30px) scale(1.08); }
+      100% { transform: translate(40px, -60px) scale(0.92); }
+    }
+    @keyframes orbDrift3 {
+      0%   { transform: translate(0, 0) scale(1); }
+      50%  { transform: translate(40px, -50px) scale(1.05); }
+      100% { transform: translate(-60px, 30px) scale(0.97); }
+    }
+
+    /* ─── THEME TOGGLE ─── */
+    .theme-toggle {
+      width: 40px; height: 40px;
+      border-radius: 50%;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      color: var(--fg);
+      font-size: 18px;
+      cursor: pointer;
+      display: grid;
+      place-items: center;
+      transition: all 0.3s ease;
+      position: relative;
+      flex-shrink: 0;
+    }
+    .theme-toggle:hover {
+      border-color: var(--accent);
+      background: var(--accent-soft);
+      transform: rotate(20deg);
+    }
+    .theme-toggle .icon-sun,
+    .theme-toggle .icon-moon {
+      position: absolute;
+      transition: opacity 0.3s, transform 0.3s;
+    }
+    .theme-toggle .icon-sun { opacity: 1; transform: rotate(0deg); }
+    .theme-toggle .icon-moon { opacity: 0; transform: rotate(-90deg); }
+    body.light .theme-toggle .icon-sun { opacity: 0; transform: rotate(90deg); }
+    body.light .theme-toggle .icon-moon { opacity: 1; transform: rotate(0deg); }
+
+    /* ─── BACK TO TOP ─── */
+    .back-to-top {
+      position: fixed;
+      bottom: 32px;
+      right: 32px;
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      color: var(--fg);
+      font-size: 20px;
+      cursor: pointer;
+      display: grid;
+      place-items: center;
+      z-index: 90;
+      opacity: 0;
+      transform: translateY(20px);
+      transition: all 0.3s ease;
+      pointer-events: none;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+    }
+    .back-to-top.visible {
+      opacity: 1;
+      transform: translateY(0);
+      pointer-events: auto;
+    }
+    .back-to-top:hover {
+      background: var(--accent);
+      border-color: var(--accent);
+      color: #fff;
+      box-shadow: 0 4px 24px var(--accent-glow);
+      transform: translateY(-2px);
+    }
+
+    /* ─── PROJECT DETAIL MODAL ─── */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.7);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      z-index: 200;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.35s ease;
+    }
+    .modal-overlay.open {
+      opacity: 1;
+      pointer-events: auto;
+    }
+    .modal {
+      width: 92vw;
+      max-width: 880px;
+      max-height: 88vh;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      transform: translateY(40px) scale(0.96);
+      transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+      box-shadow: 0 40px 100px rgba(0,0,0,0.5);
+    }
+    .modal-overlay.open .modal {
+      transform: translateY(0) scale(1);
+    }
+    .modal-header {
+      position: relative;
+      padding: 40px 40px 0;
+      flex-shrink: 0;
+    }
+    .modal-header-bg {
+      position: absolute;
+      inset: 0;
+      overflow: hidden;
+      z-index: 0;
+    }
+    .modal-header-bg .grid-pattern {
+      position: absolute;
+      inset: 0;
+      opacity: 0.06;
+      background-image:
+        linear-gradient(var(--accent) 1px, transparent 1px),
+        linear-gradient(90deg, var(--accent) 1px, transparent 1px);
+      background-size: 32px 32px;
+    }
+    .modal-header-bg .glow {
+      position: absolute;
+      top: -40%;
+      right: -20%;
+      width: 60%;
+      height: 160%;
+      border-radius: 50%;
+      filter: blur(80px);
+      opacity: 0.12;
+    }
+    .modal-close {
+      position: absolute;
+      top: 16px;
+      right: 16px;
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: rgba(0,0,0,0.4);
+      border: 1px solid rgba(255,255,255,0.1);
+      color: #fff;
+      font-size: 18px;
+      cursor: pointer;
+      display: grid;
+      place-items: center;
+      z-index: 10;
+      transition: all 0.2s;
+    }
+    .modal-close:hover {
+      background: rgba(255,255,255,0.15);
+    }
+    .modal-title-area {
+      position: relative;
+      z-index: 1;
+      padding-bottom: 28px;
+    }
+    .modal-project-icon {
+      font-size: 42px;
+      margin-bottom: 12px;
+      display: block;
+    }
+    .modal-project-name {
+      font: 800 clamp(24px, 3vw, 36px)/1.15 var(--font-display);
+      letter-spacing: -0.025em;
+      margin-bottom: 6px;
+    }
+    .modal-project-sub {
+      font: 400 14px/1.5 var(--font-body);
+      color: var(--fg-2);
+    }
+    .modal-body {
+      overflow-y: auto;
+      padding: 32px 40px 40px;
+      flex: 1;
+    }
+    .modal-body::-webkit-scrollbar { width: 6px; }
+    .modal-body::-webkit-scrollbar-track { background: transparent; }
+    .modal-body::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+
+    .modal-section {
+      margin-bottom: 32px;
+    }
+    .modal-section:last-child { margin-bottom: 0; }
+    .modal-section-title {
+      font: 600 11px/1 var(--font-mono);
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .modal-section-title::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--border);
+    }
+
+    .modal-desc {
+      font: 400 14px/1.75 var(--font-body);
+      color: var(--fg-2);
+    }
+    .modal-desc strong {
+      color: var(--fg);
+      font-weight: 600;
+    }
+
+    /* Modal metrics */
+    .modal-metrics {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+      gap: 12px;
+    }
+    .modal-metric {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 18px;
+      text-align: center;
+      transition: border-color 0.2s;
+    }
+    .modal-metric:hover {
+      border-color: var(--border-hover);
+    }
+    .modal-metric-val {
+      font: 800 28px/1 var(--font-display);
+      color: var(--accent);
+      margin-bottom: 4px;
+    }
+    .modal-metric-label {
+      font: 500 11px/1.3 var(--font-mono);
+      color: var(--muted);
+      letter-spacing: 0.03em;
+    }
+
+    /* Modal architecture / code block */
+    .modal-code {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      overflow: hidden;
+    }
+    .modal-code-bar {
+      height: 32px;
+      background: var(--bg-alt);
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      padding: 0 14px;
+      gap: 6px;
+    }
+    .modal-code-bar span { font: 500 11px/1 var(--font-mono); color: var(--muted); }
+    .modal-code-body {
+      padding: 16px 18px;
+      font: 12px/1.7 var(--font-mono);
+      color: var(--fg-2);
+      white-space: pre;
+      overflow-x: auto;
+    }
+    .modal-code-body .k { color: var(--accent); }
+    .modal-code-body .v { color: var(--green); }
+    .modal-code-body .c { color: #4a5260; }
+    .modal-code-body .n { color: #f0b866; }
+
+    /* Modal tech stack */
+    .modal-stack {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    .modal-stack-tag {
+      font: 500 12px/1 var(--font-mono);
+      padding: 8px 14px;
+      border-radius: 6px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      color: var(--accent);
+      letter-spacing: 0.03em;
+      transition: all 0.2s;
+    }
+    .modal-stack-tag:hover {
+      border-color: var(--accent);
+      background: var(--accent-soft);
+    }
+
+    /* Modal feature list */
+    .modal-features {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .modal-features li {
+      font: 400 13px/1.6 var(--font-body);
+      color: var(--fg-2);
+      padding-left: 20px;
+      position: relative;
+    }
+    .modal-features li::before {
+      content: '▸';
+      position: absolute;
+      left: 0;
+      color: var(--accent);
+      font-weight: 700;
+    }
+    .modal-features li strong {
+      color: var(--fg);
+      font-weight: 600;
+    }
+
+    /* Modal timeline badge */
+    .modal-timeline {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font: 500 12px/1 var(--font-mono);
+      color: var(--muted);
+      padding: 6px 14px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 100px;
+      margin-top: 8px;
+    }
+    .modal-timeline::before {
+      content: '';
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: var(--green);
+    }
+
+    /* Modal link */
+    .modal-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font: 600 13px/1 var(--font-body);
+      color: var(--accent);
+      padding: 10px 20px;
+      background: var(--accent-soft);
+      border: 1px solid rgba(224, 122, 79, 0.2);
+      border-radius: var(--radius-sm);
+      transition: all 0.2s;
+      margin-top: 8px;
+    }
+    .modal-link:hover {
+      background: var(--accent);
+      color: #fff;
+      border-color: var(--accent);
+    }
+
+    /* Project cards clickable */
+    .project-card {
+      cursor: pointer;
+    }
+
+    /* ─── SCROLL REVEAL ─── */
+    .reveal {
+      opacity: 0;
+      transform: translateY(28px);
+      transition: opacity 0.5s ease, transform 0.5s ease;
+    }
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* ─── RESPONSIVE ─── */
+    @media (max-width: 900px) {
+      .about-grid {
+        grid-template-columns: 1fr;
+        gap: 36px;
+      }
+      .projects-grid {
+        grid-template-columns: 1fr;
+      }
+      .nav-links { display: none; }
+      .nav-links.open {
+        display: flex;
+        flex-direction: column;
+        position: absolute;
+        top: var(--nav-h);
+        left: 0; right: 0;
+        background: var(--bg);
+        border-bottom: 1px solid var(--border);
+        padding: 20px;
+        gap: 16px;
+      }
+      .nav-toggle { display: block; }
+    }
+    @media (max-width: 600px) {
+      .hero h1 { font-size: clamp(32px, 10vw, 44px); }
+      .hero-terminal { font-size: 11px; }
+      .hero-actions { flex-direction: column; }
+      .btn { justify-content: center; width: 100%; }
+      .about-stats { grid-template-columns: 1fr 1fr; gap: 10px; }
+      .stat-card { padding: 18px; }
+      .stat-num { font-size: 26px; }
+      .skills-grid { grid-template-columns: 1fr; }
+      .contact-links { flex-direction: column; align-items: center; }
+      .contact-link { width: 100%; justify-content: center; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- FLOATING BACKGROUND ORBS -->
+  <div class="floating-orbs" aria-hidden="true">
+    <div class="floating-orb"></div>
+    <div class="floating-orb"></div>
+    <div class="floating-orb"></div>
+  </div>
+
+  <!-- NAVIGATION -->
+  <nav class="nav" id="nav">
+    <div class="nav-logo"><span>&lt;</span>Mr.Xu<span>/&gt;</span></div>
+    <ul class="nav-links" id="nav-links">
+      <li><a href="#about">关于</a></li>
+      <li><a href="#skills">技能</a></li>
+      <li><a href="#projects">项目</a></li>
+      <li><a href="#experience">经历</a></li>
+      <li><a href="#contact">联系</a></li>
+    </ul>
+    <div style="display:flex; align-items:center; gap:8px;">
+      <button class="nav-toggle" id="nav-toggle" aria-label="Toggle menu">☰</button>
+      <button class="theme-toggle" id="theme-toggle" aria-label="切换主题">
+        <span class="icon-sun">☀️</span>
+        <span class="icon-moon">🌙</span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero" id="hero">
+    <div class="hero-bg"></div>
+    <div class="hero-grid"></div>
+    <div class="hero-content">
+      <div class="hero-status"><span class="dot"></span> Open to work</div>
+      <h1>Hi, I'm <span class="accent">Mr.Xu</span></h1>
+      <p class="hero-sub">Java 全栈工程师 · 四年后端开发经验 · 从前端交互到后端架构，用代码构建有影响力的产品。</p>
+
+      <div class="hero-terminal">
+        <div class="terminal-bar">
+          <span class="terminal-dot r"></span>
+          <span class="terminal-dot y"></span>
+          <span class="terminal-dot g"></span>
+        </div>
+        <div class="terminal-body">
+          <div class="terminal-line" style="animation-delay: 0.3s">
+            <span class="prompt">$</span> <span class="cmd">cat profile.json</span>
+          </div>
+          <div class="terminal-line" style="animation-delay: 0.8s">
+            {<br>
+            &nbsp;&nbsp;<span class="key">"name"</span>: <span class="str">"Mr.Xu"</span>,<br>
+            &nbsp;&nbsp;<span class="key">"role"</span>: <span class="str">"Java Full-Stack Engineer"</span>,<br>
+            &nbsp;&nbsp;<span class="key">"experience"</span>: <span class="num">4</span>,<br>
+            &nbsp;&nbsp;<span class="key">"stack"</span>: [<span class="str">"SpringBoot"</span>, <span class="str">"SpringCloud"</span>, <span class="str">"Redis"</span>],<br>
+            &nbsp;&nbsp;<span class="key">"passion"</span>: <span class="str">"Building things that matter"</span><br>
+            }
+          </div>
+          <div class="terminal-line" style="animation-delay: 2.8s">
+            <span class="prompt">$</span> <span class="cursor"></span>
+          </div>
+        </div>
+      </div>
+
+      <div class="hero-actions">
+        <a href="#projects" class="btn btn-primary">查看项目 →</a>
+        <a href="#contact" class="btn btn-ghost">联系我</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ABOUT -->
+  <section id="about">
+    <div class="reveal">
+      <div class="section-tag">// 关于我</div>
+      <h2 class="section-title">代码是我的表达方式</h2>
+    </div>
+    <div class="about-grid">
+      <div class="about-text reveal">
+        <p>我是一名<strong>Java 全栈工程师</strong>，四年开发经验，做过电商、物联网、即时通讯、金融支付等多个领域的项目。能独立负责一个项目从需求分析到上线部署的全流程，也能带小团队协作开发。</p>
+        <p>技术上以 <strong>SpringBoot + SpringCloud</strong> 微服务架构为核心，Redis 缓存、RabbitMQ 消息队列、MySQL 分库分表这些都有实际落地经验。工作中注重代码质量和系统性能，用 JMeter 压测、Arthas 排查性能问题是日常。</p>
+        <p>在燕巢科技担任研发小组组长，带 3 人团队，负责任务分配和代码评审。几个从零到一的项目（充电桩管理、人脸考勤、仓储系统）都拿到了客户好评和项目分红。</p>
+      </div>
+      <div class="about-stats reveal">
+        <div class="stat-card">
+          <div class="stat-num">4+</div>
+          <div class="stat-label">年开发经验</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-num">10+</div>
+          <div class="stat-label">完成项目</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-num">8+</div>
+          <div class="stat-label">技术栈</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-num">3</div>
+          <div class="stat-label">家公司</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SKILLS -->
+  <section id="skills">
+    <div class="reveal">
+      <div class="section-tag">// 技能栈</div>
+      <h2 class="section-title">我的技术工具箱</h2>
+      <p class="section-desc">全栈开发意味着对每一层都有深入理解。以下是我日常使用的技术和工具。</p>
+    </div>
+    <div class="skills-grid">
+      <div class="skill-card reveal">
+        <h3><span class="skill-icon">☕</span> Java 核心</h3>
+        <div class="skill-tags">
+          <span class="skill-tag">Java</span>
+          <span class="skill-tag">JVM 调优</span>
+          <span class="skill-tag">多线程</span>
+          <span class="skill-tag">设计模式</span>
+        </div>
+      </div>
+      <div class="skill-card reveal">
+        <h3><span class="skill-icon">⚙️</span> 开发框架</h3>
+        <div class="skill-tags">
+          <span class="skill-tag">SpringBoot</span>
+          <span class="skill-tag">SpringCloud</span>
+          <span class="skill-tag">MyBatis-Plus</span>
+          <span class="skill-tag">Nacos</span>
+          <span class="skill-tag">Gateway</span>
+          <span class="skill-tag">Seata</span>
+        </div>
+      </div>
+      <div class="skill-card reveal">
+        <h3><span class="skill-icon">🗄️</span> 数据库</h3>
+        <div class="skill-tags">
+          <span class="skill-tag">MySQL</span>
+          <span class="skill-tag">Redis</span>
+          <span class="skill-tag">Redisson</span>
+          <span class="skill-tag">sharding-jdbc</span>
+          <span class="skill-tag">Prisma</span>
+        </div>
+      </div>
+      <div class="skill-card reveal">
+        <h3><span class="skill-icon">📨</span> 中间件</h3>
+        <div class="skill-tags">
+          <span class="skill-tag">RabbitMQ</span>
+          <span class="skill-tag">Elasticsearch</span>
+          <span class="skill-tag">Nginx</span>
+          <span class="skill-tag">MQTT</span>
+        </div>
+      </div>
+      <div class="skill-card reveal">
+        <h3><span class="skill-icon">☁️</span> DevOps</h3>
+        <div class="skill-tags">
+          <span class="skill-tag">Docker</span>
+          <span class="skill-tag">Linux</span>
+          <span class="skill-tag">阿里云</span>
+          <span class="skill-tag">ELK</span>
+          <span class="skill-tag">Git</span>
+        </div>
+      </div>
+      <div class="skill-card reveal">
+        <h3><span class="skill-icon">🛠️</span> 工具链</h3>
+        <div class="skill-tags">
+          <span class="skill-tag">Maven</span>
+          <span class="skill-tag">Swagger</span>
+          <span class="skill-tag">JMeter</span>
+          <span class="skill-tag">Arthas</span>
+          <span class="skill-tag">XXL-JOB</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PROJECTS -->
+  <section id="projects" style="padding-top: 66px;">
+    <div class="reveal">
+      <div class="section-tag">// 精选项目</div>
+      <h2 class="section-title">我构建的作品</h2>
+      <p class="section-desc">每个项目都是一次从零到一的旅程。以下是一些我引以为豪的作品。</p>
+    </div>
+    <div class="projects-grid">
+
+      <div class="project-card reveal" data-project="exchange">
+        <div class="project-visual" style="background: linear-gradient(135deg, #1a1520, #12151a)">
+          <div class="grid-pattern"></div>
+          <span class="icon-bg">📈</span>
+        </div>
+        <div class="project-body">
+          <h3>虚拟资产交易所</h3>
+          <p>多币种交易平台，支持实时行情、钱包管理、充值交易提现全流程。5 个微服务拆分，Redisson 分布式锁保障高并发一致性。</p>
+          <div class="project-meta">
+            <div class="project-stack">
+              <span>SpringCloud</span>
+              <span>Nacos</span>
+              <span>Redis</span>
+              <span>RabbitMQ</span>
+            </div>
+            <span class="project-stat">日交易额 100万+</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="project-card reveal" data-project="chat">
+        <div class="project-visual" style="background: linear-gradient(135deg, #151a20, #12151a)">
+          <div class="grid-pattern"></div>
+          <span class="icon-bg">💬</span>
+        </div>
+        <div class="project-body">
+          <h3>随便说 · 即时通讯 APP</h3>
+          <p>从零搭建的通讯应用，支持消息、红包、转账、朋友圈。封装腾讯 IM 15 个公共方法，对接银盛支付处理支付回调和对账。</p>
+          <div class="project-meta">
+            <div class="project-stack">
+              <span>SpringBoot</span>
+              <span>腾讯 IM</span>
+              <span>Redis</span>
+              <span>MySQL</span>
+            </div>
+            <span class="project-stat">按时上线</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="project-card reveal" data-project="yanchao">
+        <div class="project-visual" style="background: linear-gradient(135deg, #1a1815, #12151a)">
+          <div class="grid-pattern"></div>
+          <span class="icon-bg">🏙️</span>
+        </div>
+        <div class="project-body">
+          <h3>燕巢 APP · 本地生活平台</h3>
+          <p>整合外卖、商城、团购、自建骑手配送。参与四大核心模块开发，优化 20+ 条慢 SQL，sharding-jdbc 分表支撑千万级数据。</p>
+          <div class="project-meta">
+            <div class="project-stack">
+              <span>SpringCloud</span>
+              <span>Nacos</span>
+              <span>sharding-jdbc</span>
+              <span>RabbitMQ</span>
+            </div>
+            <span class="project-stat">日订单 5000+</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="project-card reveal" data-project="charger">
+        <div class="project-visual" style="background: linear-gradient(135deg, #151a18, #12151a)">
+          <div class="grid-pattern"></div>
+          <span class="icon-bg">⚡</span>
+        </div>
+        <div class="project-body">
+          <h3>充电桩管理平台</h3>
+          <p>从需求分析到上线部署独立完成。MQTT 通信适配层支持多型号充电桩，Redis 缓存设备状态，故障自动告警替代人工巡检。</p>
+          <div class="project-meta">
+            <div class="project-stack">
+              <span>SpringBoot</span>
+              <span>MQTT</span>
+              <span>Redis</span>
+              <span>MySQL</span>
+            </div>
+            <span class="project-stat">管理 50+ 台设备</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- More projects (hidden by default) -->
+    <div class="projects-grid" id="more-projects" style="display:none; margin-top: 20px;">
+
+      <div class="project-card" data-project="faceid">
+        <div class="project-visual" style="background: linear-gradient(135deg, #1a1a15, #12151a)">
+          <div class="grid-pattern"></div>
+          <span class="icon-bg">👁️</span>
+        </div>
+        <div class="project-body">
+          <h3>人脸考勤系统</h3>
+          <p>对接海康威视 API 实现人脸识别打卡，多数据源方案同步本地与台湾总部数据，XXL-JOB 分布式定时任务自动同步考勤。</p>
+          <div class="project-meta">
+            <div class="project-stack">
+              <span>SpringBoot</span>
+              <span>多数据源</span>
+              <span>XXL-JOB</span>
+              <span>MySQL</span>
+            </div>
+            <span class="project-stat">考勤准确率极高</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="project-card" data-project="cctv">
+        <div class="project-visual" style="background: linear-gradient(135deg, #151a1a, #12151a)">
+          <div class="grid-pattern"></div>
+          <span class="icon-bg">📹</span>
+        </div>
+        <div class="project-body">
+          <h3>视频监控平台</h3>
+          <p>Web 端实时预览与录像回放，ZLMediaKit 实现 GB28181 协议推流，支持摄像头分组、状态监控、远程配置。</p>
+          <div class="project-meta">
+            <div class="project-stack">
+              <span>SpringBoot</span>
+              <span>ZLMediaKit</span>
+              <span>GB28181</span>
+              <span>MySQL</span>
+            </div>
+            <span class="project-stat">接入 30+ 路摄像头</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="project-card" data-project="nike">
+        <div class="project-visual" style="background: linear-gradient(135deg, #1a181a, #12151a)">
+          <div class="grid-pattern"></div>
+          <span class="icon-bg">📦</span>
+        </div>
+        <div class="project-body">
+          <h3>NIKE 研发中心仓储系统</h3>
+          <p>中英双语仓储管理系统，ResourceBundle 国际化方案，Apache POI 批量导入导出，Redis 缓存热点数据提升查询效率。</p>
+          <div class="project-meta">
+            <div class="project-stack">
+              <span>SpringBoot</span>
+              <span>国际化</span>
+              <span>POI</span>
+              <span>Redis</span>
+            </div>
+            <span class="project-stat">拿到项目分红</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="project-card" data-project="canteen">
+        <div class="project-visual" style="background: linear-gradient(135deg, #151a15, #12151a)">
+          <div class="grid-pattern"></div>
+          <span class="icon-bg">🍽️</span>
+        </div>
+        <div class="project-body">
+          <h3>智慧食堂系统</h3>
+          <p>"明厨亮灶"与"光盘行动"技术方案。会员、优惠券、订单、财务全流程管理，对接微信小程序登录与支付。</p>
+          <div class="project-meta">
+            <div class="project-stack">
+              <span>SpringBoot</span>
+              <span>微信小程序</span>
+              <span>MyBatis-Plus</span>
+              <span>Redis</span>
+            </div>
+            <span class="project-stat">服务 10+ 家食堂</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <div style="text-align: center; margin-top: 32px;" class="reveal">
+      <button class="btn btn-ghost" id="toggle-projects" style="cursor: pointer;">
+        查看全部项目 ↓
+      </button>
+    </div>
+
+  </section>
+
+  <!-- EXPERIENCE -->
+  <section id="experience">
+    <div class="reveal">
+      <div class="section-tag">// 工作经历</div>
+      <h2 class="section-title">我的成长轨迹</h2>
+      <p class="section-desc">每一段经历都塑造了我对软件开发的理解。</p>
+    </div>
+    <div class="timeline reveal">
+      <div class="timeline-item current">
+        <div class="timeline-header">
+          <span class="timeline-date">2024.07 — 至今</span>
+          <span class="timeline-role">Java 研发工程师 · 研发小组组长</span>
+        </div>
+        <div class="timeline-company">燕巢科技有限公司</div>
+        <div class="timeline-desc">负责核心电商系统开发与微服务架构设计，带 3 人小团队。主导虚拟资产交易所、即时通讯 APP、充电桩管理等多个项目，优化 20+ 条慢 SQL，搭建 ELK 日志系统。</div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-header">
+          <span class="timeline-date">2022.06 — 2024.06</span>
+          <span class="timeline-role">Java 研发工程师</span>
+        </div>
+        <div class="timeline-company">物网智能科技有限公司</div>
+        <div class="timeline-desc">做物联网平台后端开发，对接硬件 MQTT 协议实现设备状态上报和指令下发。重构老代码用设计模式优化，单元测试覆盖率做到 80%+。</div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-header">
+          <span class="timeline-date">2022.01 — 2022.05</span>
+          <span class="timeline-role">Java 开发工程师</span>
+        </div>
+        <div class="timeline-company">优信无限有限公司</div>
+        <div class="timeline-desc">做智慧食堂系统后端，负责经营管理、财务管理模块。对接微信小程序登录和支付接口，用 MyBatis-Plus 多数据源实现跨库数据存取。</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section class="contact-section" id="contact">
+    <div class="reveal">
+      <div class="section-tag">// 联系我</div>
+      <h2 class="section-title">一起构建点什么</h2>
+      <p class="section-desc">无论是工作机会、项目合作还是技术交流，都欢迎随时联系我。</p>
+    </div>
+    <div class="contact-links reveal">
+      <a class="contact-link">
+        <svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
+        199-2751-4768
+      </a>
+      <a href="https://github.com/xiaoyu3432-png" class="contact-link" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24"><path d="M15 22v-4a4.8 4.8 0 0 0-1-3.5c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 0-3 1.5-2.64-.5-5.36-.5-8 0C6 2 5 2 5 2c-.3 1.15-.3 2.35 0 3.5A5.403 5.403 0 0 0 4 9c0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65-.17.6-.22 1.23-.15 1.85v4"></path><path d="M9 18c-4.51 2-5-2-7-2"></path></svg>
+        GitHub
+      </a>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <p>Designed &amp; Built with <span class="heart">♥</span> by Mr.Xu · 2026</p>
+  </footer>
+
+  <!-- BACK TO TOP -->
+  <button class="back-to-top" id="back-to-top" aria-label="回到顶部">↑</button>
+
+  <!-- PROJECT DETAIL MODAL -->
+  <div class="modal-overlay" id="modal-overlay">
+    <div class="modal" id="modal">
+      <div class="modal-header" id="modal-header">
+        <div class="modal-header-bg" id="modal-header-bg"></div>
+        <button class="modal-close" id="modal-close">✕</button>
+        <div class="modal-title-area" id="modal-title-area"></div>
+      </div>
+      <div class="modal-body" id="modal-body"></div>
+    </div>
+  </div>
+
+  <script>
+    /* ═══════════════════════════════════════════════════════
+       PROJECT DATA — all 8 projects with real resume details
+       ═══════════════════════════════════════════════════════ */
+    const PROJECTS = {
+      exchange: {
+        icon: '📈',
+        name: '虚拟资产交易所',
+        sub: '多币种数字资产交易平台 · 2026.02 — 2026.05',
+        gradient: 'linear-gradient(135deg, #1a1520, #0d0f12)',
+        glow: '#e07a4f',
+        desc: `公司需要构建一个支持多币种交易的虚拟资产交易平台，涵盖实时行情、钱包管理、充值交易提现全流程。我负责<strong>技术选型和整体架构设计</strong>，将系统拆分为用户、交易、钱包、行情、风控 5 个微服务，采用 SpringCloud + Nacos + Gateway 架构。<br><br>核心工作是设计充值、交易、提现等业务流程，使用<strong>策略模式</strong>优化代码结构。通过 <strong>Redisson 分布式锁</strong>解决高并发下余额扣减和重复提交问题，用 <strong>RabbitMQ</strong> 异步处理交易回调实现流程解耦。使用 JMeter 压测优化了 15 条慢 SQL，Arthas 做性能监控。`,
+        metrics: [
+          { val: '100万+', label: '日交易额' },
+          { val: '5', label: '微服务拆分' },
+          { val: '15', label: '慢 SQL 优化' },
+          { val: '99.9%', label: '系统可用性' }
+        ],
+        arch: `<span class="c">// 微服务架构</span>
+<span class="k">Gateway</span>  →  <span class="k">Nacos</span> 服务注册发现
+   ├── <span class="v">user-service</span>      <span class="c">// 用户认证 / KYC</span>
+   ├── <span class="v">trade-service</span>     <span class="c">// 撮合 / 挂单 / 成交</span>
+   ├── <span class="v">wallet-service</span>    <span class="c">// 充值 / 提现 / 余额</span>
+   ├── <span class="v">market-service</span>    <span class="c">// 实时行情推送</span>
+   └── <span class="v">risk-service</span>      <span class="c">// 风控 / 反洗钱</span>
+
+<span class="c">// 分布式锁保障一致性</span>
+<span class="k">Redisson</span>.getLock(<span class="v">"balance:"</span> + userId)
+  → 扣减余额 → 记录流水 → 释放锁
+
+<span class="c">// 异步解耦交易回调</span>
+<span class="k">RabbitMQ</span> → exchange.trade.callback
+  → wallet 更新 → 通知推送`,
+        stack: ['SpringCloud', 'Nacos', 'Gateway', 'Redis', 'Redisson', 'RabbitMQ', 'MySQL', 'JMeter', 'Arthas'],
+        features: [
+          '<strong>策略模式</strong>封装充值/交易/提现流程，新增币种只需新增策略类',
+          '<strong>Redisson 分布式锁</strong>保障高并发下余额操作的原子性和一致性',
+          '<strong>RabbitMQ 异步</strong>处理交易回调，交易流程与通知/记录完全解耦',
+          'JMeter 压测 + Arthas 在线诊断，持续优化系统性能',
+          'Gateway 统一鉴权 + 限流，Nacos 动态配置管理'
+        ]
+      },
+      chat: {
+        icon: '💬',
+        name: '随便说 · 即时通讯 APP',
+        sub: '全功能通讯应用 · 2025.10 — 2026.01',
+        gradient: 'linear-gradient(135deg, #151a20, #0d0f12)',
+        glow: '#6366f1',
+        desc: '从零搭建的即时通讯应用，支持消息、红包、转账、朋友圈等社交功能，同时配套运营管理后台。我<strong>独立完成</strong>技术选型、架构设计和核心代码开发。<br><br>封装腾讯 IM SDK 的 15 个公共方法，对接银盛支付处理支付回调、退款和对账。用 Redis 实现会话管理、验证码存储和接口防重提交。建立统一异常处理和日志记录体系。',
+        metrics: [
+          { val: '15', label: '封装 API 方法' },
+          { val: '100%', label: '独立完成' },
+          { val: '按时', label: '项目交付' },
+          { val: '零', label: '线上事故' }
+        ],
+        arch: `<span class="c">// 技术架构</span>
+<span class="k">SpringBoot</span> + <span class="k">MyBatis-Plus</span>
+   ├── <span class="v">用户模块</span>    <span class="c">// 登录 / 注册 / 个人资料</span>
+   ├── <span class="v">IM 模块</span>     <span class="c">// 腾讯 IM SDK 封装</span>
+   ├── <span class="v">支付模块</span>    <span class="c">// 银盛支付 / 红包 / 转账</span>
+   ├── <span class="v">社交模块</span>    <span class="c">// 朋友圈 / 点赞 / 评论</span>
+   └── <span class="v">运营后台</span>    <span class="c">// 用户管理 / 数据统计</span>
+
+<span class="c">// 腾讯 IM 封装层</span>
+<span class="k">TencentIMClient</span>
+  .sendMessage()    <span class="c">// 单聊/群聊</span>
+  .sendRedPacket()  <span class="c">// 红包消息</span>
+  .syncFriends()    <span class="c">// 好友同步</span>
+
+<span class="c">// 支付回调处理</span>
+<span class="k">PayCallback</span> → 验签 → 更新订单 → 通知用户`,
+        stack: ['SpringBoot', 'MyBatis-Plus', '腾讯 IM', '银盛支付', 'Redis', 'MySQL'],
+        features: [
+          '封装腾讯 IM SDK <strong>15 个公共方法</strong>，屏蔽底层复杂度',
+          '完整支付系统：对接银盛支付，处理<strong>回调、退款、对账</strong>全流程',
+          'Redis 实现<strong>会话管理、验证码存储、接口防重提交</strong>',
+          '统一异常处理 + 日志记录体系，线上问题可追溯',
+          '配套运营管理后台，支持用户管理和数据统计'
+        ],
+        link: 'https://main-pro.yanchaochao.com/download/#/download?type=3'
+      },
+      yanchao: {
+        icon: '🏙️',
+        name: '燕巢 APP · 本地生活平台',
+        sub: '外卖 · 商城 · 团购 · 骑手配送 · 2025.06 — 2025.09',
+        gradient: 'linear-gradient(135deg, #1a1815, #0d0f12)',
+        glow: '#f59e0b',
+        desc: '本地生活服务平台，整合外卖、商城、团购业务，自建骑手配送体系。我参与<strong>外卖、商城、团购、商家</strong>四大核心模块的开发。<br><br>使用 SpringCloud + Nacos 搭建微服务架构，实现服务注册发现和负载均衡。重构老代码解决多个性能瓶颈，<strong>优化 20+ 条慢 SQL</strong>，建立索引优化方案。用 sharding-jdbc 做订单表分表，支撑千万级数据量。',
+        metrics: [
+          { val: '5000+', label: '日订单量' },
+          { val: '20+', label: '慢 SQL 优化' },
+          { val: '4', label: '核心模块' },
+          { val: '千万级', label: '数据支撑' }
+        ],
+        arch: `<span class="c">// 微服务架构</span>
+<span class="k">SpringCloud</span> + <span class="k">Nacos</span> + <span class="k">OpenFeign</span>
+   ├── <span class="v">takeout-service</span>   <span class="c">// 外卖模块</span>
+   ├── <span class="v">mall-service</span>      <span class="c">// 商城模块</span>
+   ├── <span class="v">group-service</span>     <span class="c">// 团购模块</span>
+   ├── <span class="v">merchant-service</span>  <span class="c">// 商家管理</span>
+   ├── <span class="v">rider-service</span>     <span class="c">// 骑手配送</span>
+   └── <span class="v">order-service</span>     <span class="c">// 订单中心</span>
+
+<span class="c">// 分表方案</span>
+<span class="k">sharding-jdbc</span>
+  → order 表按月分表
+  → 支撑千万级订单数据
+
+<span class="c">// 消息队列</span>
+<span class="k">RabbitMQ</span> → 订单状态变更 → 骑手调度`,
+        stack: ['SpringCloud', 'Nacos', 'OpenFeign', 'MyBatis-Plus', 'Redis', 'RabbitMQ', 'sharding-jdbc', 'MySQL'],
+        features: [
+          '参与<strong>外卖、商城、团购、商家</strong>四大核心模块开发',
+          '重构老代码解决性能瓶颈，接口响应速度显著提升',
+          '优化 <strong>20+ 条慢 SQL</strong>，建立索引优化方案和 SQL 审核流程',
+          '<strong>sharding-jdbc</strong> 订单表分表，支撑千万级数据',
+          'SpringCloud 微服务架构，Nacos 服务注册发现 + 负载均衡'
+        ]
+      },
+      charger: {
+        icon: '⚡',
+        name: '充电桩管理平台',
+        sub: 'IoT 设备管理 · 扫码充电 · 2025.03 — 2025.05',
+        gradient: 'linear-gradient(135deg, #151a18, #0d0f12)',
+        glow: '#10b981',
+        desc: '鞋厂需要为员工提供充电服务，构建管理平台实现远程监控设备、扫码充电、费用结算。我<strong>独立完成</strong>从需求分析到上线部署的全流程。<br><br>设计 MQTT 通信适配层，支持多种充电桩型号接入。用 Redis 缓存设备状态实现快速查询，设备故障从人工巡检升级为<strong>自动告警</strong>。现场调试部署，解决多个硬件兼容问题。',
+        metrics: [
+          { val: '50+', label: '管理设备数' },
+          { val: '200+', label: '服务员工' },
+          { val: '100%', label: '独立完成' },
+          { val: '自动', label: '故障告警' }
+        ],
+        arch: `<span class="c">// 系统架构</span>
+<span class="k">SpringBoot</span> + <span class="k">MQTT</span> + <span class="k">Redis</span>
+   ├── <span class="v">设备管理</span>    <span class="c">// 注册 / 监控 / 配置</span>
+   ├── <span class="v">充电服务</span>    <span class="c">// 扫码 / 启停 / 计费</span>
+   ├── <span class="v">MQTT 适配</span>   <span class="c">// 多型号协议适配</span>
+   ├── <span class="v">告警系统</span>    <span class="c">// 故障检测 / 自动通知</span>
+   └── <span class="v">费用结算</span>    <span class="c">// 充电统计 / 账单</span>
+
+<span class="c">// MQTT 通信适配层</span>
+<span class="k">MqttAdapter</span>
+  → 解析设备上报 → 更新 Redis 状态
+  → 下发控制指令 → 记录操作日志
+
+<span class="c">// 设备状态缓存</span>
+<span class="k">Redis</span>.hset(<span class="v">"device:"</span> + id, status, ts)
+  → 实时查询 <span class="n">O(1)</span>`,
+        stack: ['SpringBoot', 'MyBatis-Plus', 'MQTT', 'Redis', 'MySQL', 'Nginx'],
+        features: [
+          '<strong>MQTT 通信适配层</strong>，支持多种充电桩型号协议接入',
+          'Redis 缓存设备状态，查询响应 <strong>O(1)</strong>',
+          '设备故障<strong>自动告警</strong>，替代人工巡检模式',
+          '现场调试部署，解决硬件兼容性问题',
+          '完整充电生命周期：扫码 → 启动 → 计费 → 结算'
+        ]
+      },
+      faceid: {
+        icon: '👁️',
+        name: '人脸考勤系统',
+        sub: '智能考勤 · 跨境数据同步 · 2025.01 — 2025.03',
+        gradient: 'linear-gradient(135deg, #1a1a15, #0d0f12)',
+        glow: '#8b5cf6',
+        desc: '鞋厂需要智能考勤系统，员工刷脸打卡，数据自动统计，并与台湾总部同步。我<strong>独立完成</strong>系统设计和开发。<br><br>对接海康威视 API 实现人脸识别打卡。采用<strong>多数据源方案</strong>将本地数据库与台湾服务器数据同步。用 XXL-JOB 实现分布式定时任务管理，考勤数据自动同步。考勤机掉线自动发邮件告警。',
+        metrics: [
+          { val: '极高', label: '考勤准确率' },
+          { val: '2', label: '跨境数据源' },
+          { val: '自动', label: '数据同步' },
+          { val: '邮件', label: '掉线告警' }
+        ],
+        arch: `<span class="c">// 系统架构</span>
+<span class="k">SpringBoot</span> + <span class="k">多数据源</span> + <span class="k">XXL-JOB</span>
+   ├── <span class="v">人脸识别</span>    <span class="c">// 海康威视 API 对接</span>
+   ├── <span class="v">考勤管理</span>    <span class="c">// 打卡记录 / 统计报表</span>
+   ├── <span class="v">数据同步</span>    <span class="c">// 本地 ↔ 台湾总部</span>
+   ├── <span class="v">设备监控</span>    <span class="c">// 考勤机状态 / 告警</span>
+   └── <span class="v">定时任务</span>    <span class="c">// XXL-JOB 调度</span>
+
+<span class="c">// 多数据源配置</span>
+<span class="k">DataSource</span>
+  → local_db   <span class="c">// 本地考勤数据</span>
+  → remote_db  <span class="c">// 台湾总部服务器</span>
+
+<span class="c">// 定时同步</span>
+<span class="k">XXL-JOB</span> → syncAttendance()
+  → 拉取增量数据 → 写入远程 → 记录日志`,
+        stack: ['SpringBoot', 'MyBatis-Plus', '海康威视 API', '多数据源', 'XXL-JOB', 'MySQL'],
+        features: [
+          '对接<strong>海康威视 API</strong>，实现人脸识别打卡',
+          '<strong>多数据源方案</strong>，本地与台湾总部数据实时同步',
+          '<strong>XXL-JOB</strong> 分布式定时任务，考勤数据自动同步',
+          '考勤机掉线<strong>自动邮件告警</strong>，运维零延迟',
+          '考勤统计报表自动生成，减少人工统计工作量'
+        ]
+      },
+      cctv: {
+        icon: '📹',
+        name: '视频监控平台',
+        sub: 'Web 实时预览 · 录像回放 · 2024.10 — 2024.12',
+        gradient: 'linear-gradient(135deg, #151a1a, #0d0f12)',
+        glow: '#06b6d4',
+        desc: '鞋厂需要视频监控方案，能在 Web 端查看实时画面和录像回放。我<strong>独立搭建</strong>监控平台，接入 30+ 路摄像头。<br><br>使用 ZLMediaKit 实现 <strong>GB28181 协议</strong>推流，支持 Web 端预览和回放。开发摄像头管理功能，支持分组、状态监控、远程配置。用 Wireshark 抓包解决多个网络传输问题。项目获得客户认可，拿到项目分红。',
+        metrics: [
+          { val: '30+', label: '接入摄像头' },
+          { val: 'GB28181', label: '推流协议' },
+          { val: 'Web', label: '实时预览' },
+          { val: '分红', label: '项目奖励' }
+        ],
+        arch: `<span class="c">// 系统架构</span>
+<span class="k">SpringBoot</span> + <span class="k">ZLMediaKit</span> + <span class="k">GB28181</span>
+   ├── <span class="v">摄像头管理</span>  <span class="c">// 注册 / 分组 / 配置</span>
+   ├── <span class="v">实时预览</span>    <span class="c">// Web 端直播流</span>
+   ├── <span class="v">录像回放</span>    <span class="c">// 历史录像查询</span>
+   ├── <span class="v">状态监控</span>    <span class="c">// 设备在线检测</span>
+   └── <span class="v">远程配置</span>    <span class="c">// 参数下发</span>
+
+<span class="c">// 推流链路</span>
+摄像头 → <span class="k">GB28181</span> → <span class="k">ZLMediaKit</span>
+  → 转码 → <span class="v">WebRTC/HLS</span> → 浏览器
+
+<span class="c">// 问题排查</span>
+<span class="k">Wireshark</span> 抓包 → 定位网络问题 → 修复`,
+        stack: ['SpringBoot', 'MyBatis-Plus', 'ZLMediaKit', 'GB28181', 'MySQL', 'Wireshark'],
+        features: [
+          '<strong>ZLMediaKit</strong> 实现 GB28181 协议推流',
+          'Web 端<strong>实时预览 + 录像回放</strong>',
+          '摄像头分组管理、状态监控、远程配置',
+          'Wireshark 抓包解决网络传输问题',
+          '平台稳定运行，获得客户认可和<strong>项目分红</strong>'
+        ]
+      },
+      nike: {
+        icon: '📦',
+        name: 'NIKE 研发中心仓储系统',
+        sub: '中英双语 · 入库出库盘点 · 2024.07 — 2024.09',
+        gradient: 'linear-gradient(135deg, #1a181a, #0d0f12)',
+        glow: '#f43f5e',
+        desc: 'NIKE 研发中心需要仓储管理系统，管理入库、出库、盘点，支持<strong>中英双语</strong>。我<strong>独立完成</strong>需求分析、架构设计和全栈开发。<br><br>用 ResourceBundle 实现国际化，Apache POI 做 Excel 批量导入导出。Redis 缓存热点数据显著提升查询效率。驻场部署上线，培训用户使用，收集反馈持续优化。获得客户好评和项目分红。',
+        metrics: [
+          { val: '中/英', label: '双语支持' },
+          { val: '分红', label: '项目奖励' },
+          { val: '100%', label: '独立完成' },
+          { val: '好评', label: '客户反馈' }
+        ],
+        arch: `<span class="c">// 系统架构</span>
+<span class="k">SpringBoot</span> + <span class="k">MyBatis-Plus</span> + <span class="k">Redis</span>
+   ├── <span class="v">入库管理</span>    <span class="c">// 采购入库 / 退料入库</span>
+   ├── <span class="v">出库管理</span>    <span class="c">// 销售出库 / 调拨</span>
+   ├── <span class="v">盘点管理</span>    <span class="c">// 实盘 / 差异报表</span>
+   ├── <span class="v">报表导出</span>    <span class="c">// Apache POI</span>
+   └── <span class="v">国际化</span>      <span class="c">// ResourceBundle</span>
+
+<span class="c">// 国际化方案</span>
+<span class="k">ResourceBundle</span>
+  → messages_zh_CN.properties
+  → messages_en_US.properties
+  → 运行时切换 / 前端语言包
+
+<span class="c">// 数据导出</span>
+<span class="k">Apache POI</span> → 生成 Excel → 批量导入导出`,
+        stack: ['SpringBoot', 'MyBatis-Plus', 'Redis', 'MySQL', 'Apache POI', 'ResourceBundle'],
+        features: [
+          '<strong>ResourceBundle 国际化</strong>，中英双语无缝切换',
+          '<strong>Apache POI</strong> 批量导入导出，Excel 报表一键生成',
+          'Redis 缓存热点数据，查询效率显著提升',
+          '驻场部署上线，<strong>培训用户 + 收集反馈</strong>持续优化',
+          '完整仓储生命周期：入库 → 出库 → 盘点 → 报表'
+        ]
+      },
+      canteen: {
+        icon: '🍽️',
+        name: '智慧食堂系统',
+        sub: '明厨亮灶 · 光盘行动 · 2022.03 — 2022.05',
+        gradient: 'linear-gradient(135deg, #151a15, #0d0f12)',
+        glow: '#22c55e',
+        desc: '用技术帮食堂实现"明厨亮灶"和"光盘行动"。我参与需求讨论，负责<strong>经营管理</strong>和<strong>财务管理</strong>模块的接口开发。<br><br>经营管理模块涵盖会员、优惠券、订单、申诉审核。财务管理模块涵盖充值、提现、消费、退款、分成、统计报表。对接微信小程序登录和支付接口，用 MyBatis-Plus 多数据源实现跨库数据存取。项目获得多项发明专利。',
+        metrics: [
+          { val: '10+', label: '服务食堂数' },
+          { val: '多项', label: '发明专利' },
+          { val: '6', label: '财务子模块' },
+          { val: '微信', label: '小程序对接' }
+        ],
+        arch: `<span class="c">// 系统架构</span>
+<span class="k">SpringBoot</span> + <span class="k">MyBatis-Plus</span> + <span class="k">微信小程序</span>
+   ├── <span class="v">经营管理</span>    <span class="c">// 会员 / 优惠券 / 订单</span>
+   ├── <span class="v">财务管理</span>    <span class="c">// 充值 / 提现 / 退款</span>
+   ├── <span class="v">小程序端</span>    <span class="c">// 登录 / 支付 / 点餐</span>
+   ├── <span class="v">明厨亮灶</span>    <span class="c">// 视频监控接入</span>
+   └── <span class="v">光盘行动</span>    <span class="c">// 剩餐统计</span>
+
+<span class="c">// 微信对接</span>
+<span class="k">WxMaService</span>
+  → 登录授权 → 获取 openid
+  → 统一下单 → 支付回调
+
+<span class="c">// 多数据源</span>
+<span class="k">MyBatis-Plus</span> → @DS("finance")
+  → 跨库数据存取`,
+        stack: ['SpringBoot', 'MyBatis-Plus', 'Redis', 'MySQL', '微信小程序', 'EasyPOI'],
+        features: [
+          '<strong>经营管理</strong>：会员、优惠券、订单、申诉审核全流程',
+          '<strong>财务管理</strong>：充值、提现、消费、退款、分成、统计报表',
+          '对接<strong>微信小程序</strong>登录和支付接口',
+          'MyBatis-Plus <strong>多数据源</strong>实现跨库数据存取',
+          '项目获得<strong>多项发明专利</strong>，服务 10+ 家食堂'
+        ]
+      }
+    };
+
+    /* ═══════════════════════════════════════════════════════
+       MODAL SYSTEM
+       ═══════════════════════════════════════════════════════ */
+    const overlay = document.getElementById('modal-overlay');
+    const modal = document.getElementById('modal');
+    const modalClose = document.getElementById('modal-close');
+    const modalHeader = document.getElementById('modal-header');
+    const modalHeaderBg = document.getElementById('modal-header-bg');
+    const modalTitleArea = document.getElementById('modal-title-area');
+    const modalBody = document.getElementById('modal-body');
+    const body = document.body;
+
+    function openProject(key) {
+      const p = PROJECTS[key];
+      if (!p) return;
+
+      // Header background — adapt to current theme
+      const isLight = body.classList.contains('light');
+      modalHeaderBg.innerHTML = `<div class="grid-pattern"></div><div class="glow" style="background:${p.glow}${isLight ? ';opacity:0.18' : ''}"></div>`;
+      if (isLight) {
+        modalHeader.style.background = `linear-gradient(135deg, color-mix(in srgb, ${p.glow} 8%, #f5f4ed), #f0efe8)`;
+      } else {
+        modalHeader.style.background = p.gradient;
+      }
+
+      // Title area
+      let titleHTML = `<span class="modal-project-icon">${p.icon}</span>`;
+      titleHTML += `<h2 class="modal-project-name">${p.name}</h2>`;
+      titleHTML += `<p class="modal-project-sub">${p.sub}</p>`;
+      modalTitleArea.innerHTML = titleHTML;
+
+      // Body
+      let bodyHTML = '';
+
+      // Metrics
+      if (p.metrics && p.metrics.length) {
+        bodyHTML += `<div class="modal-section">`;
+        bodyHTML += `<div class="modal-section-title">核心指标</div>`;
+        bodyHTML += `<div class="modal-metrics">`;
+        p.metrics.forEach(m => {
+          bodyHTML += `<div class="modal-metric"><div class="modal-metric-val">${m.val}</div><div class="modal-metric-label">${m.label}</div></div>`;
+        });
+        bodyHTML += `</div></div>`;
+      }
+
+      // Description
+      bodyHTML += `<div class="modal-section">`;
+      bodyHTML += `<div class="modal-section-title">项目详情</div>`;
+      bodyHTML += `<div class="modal-desc">${p.desc}</div>`;
+      bodyHTML += `</div>`;
+
+      // Architecture
+      if (p.arch) {
+        bodyHTML += `<div class="modal-section">`;
+        bodyHTML += `<div class="modal-section-title">技术架构</div>`;
+        bodyHTML += `<div class="modal-code"><div class="modal-code-bar"><span>architecture.txt</span></div>`;
+        bodyHTML += `<div class="modal-code-body">${p.arch}</div></div>`;
+        bodyHTML += `</div>`;
+      }
+
+      // Tech stack
+      if (p.stack && p.stack.length) {
+        bodyHTML += `<div class="modal-section">`;
+        bodyHTML += `<div class="modal-section-title">技术栈</div>`;
+        bodyHTML += `<div class="modal-stack">`;
+        p.stack.forEach(s => {
+          bodyHTML += `<span class="modal-stack-tag">${s}</span>`;
+        });
+        bodyHTML += `</div></div>`;
+      }
+
+      // Features
+      if (p.features && p.features.length) {
+        bodyHTML += `<div class="modal-section">`;
+        bodyHTML += `<div class="modal-section-title">核心亮点</div>`;
+        bodyHTML += `<ul class="modal-features">`;
+        p.features.forEach(f => {
+          bodyHTML += `<li>${f}</li>`;
+        });
+        bodyHTML += `</ul></div>`;
+      }
+
+      // Link
+      if (p.link) {
+        bodyHTML += `<div class="modal-section">`;
+        bodyHTML += `<a href="${p.link}" target="_blank" rel="noopener" class="modal-link">🔗 查看项目链接</a>`;
+        bodyHTML += `</div>`;
+      }
+
+      modalBody.innerHTML = bodyHTML;
+
+      // Open
+      overlay.classList.add('open');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeModal() {
+      overlay.classList.remove('open');
+      document.body.style.overflow = '';
+    }
+
+    modalClose.addEventListener('click', closeModal);
+    overlay.addEventListener('click', e => {
+      if (e.target === overlay) closeModal();
+    });
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Escape') closeModal();
+    });
+
+    // Attach click handlers to project cards
+    document.querySelectorAll('[data-project]').forEach(card => {
+      card.addEventListener('click', () => openProject(card.dataset.project));
+    });
+
+    /* ═══════════════════════════════════════════════════════
+       BACK TO TOP
+       ═══════════════════════════════════════════════════════ */
+    const backToTop = document.getElementById('back-to-top');
+    window.addEventListener('scroll', () => {
+      backToTop.classList.toggle('visible', window.scrollY > 400);
+    }, { passive: true });
+    backToTop.addEventListener('click', () => {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+
+    /* ═══════════════════════════════════════════════════════
+       SCROLL REVEAL
+       ═══════════════════════════════════════════════════════ */
+    const reveals = document.querySelectorAll('.reveal');
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry, i) => {
+        if (entry.isIntersecting) {
+          setTimeout(() => entry.target.classList.add('visible'), i * 60);
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.1, rootMargin: '0px 0px -30px 0px' });
+    reveals.forEach(el => observer.observe(el));
+
+    /* ═══════════════════════════════════════════════════════
+       NAV SCROLL
+       ═══════════════════════════════════════════════════════ */
+    const nav = document.getElementById('nav');
+    window.addEventListener('scroll', () => {
+      nav.classList.toggle('scrolled', window.scrollY > 40);
+    }, { passive: true });
+
+    /* ═══════════════════════════════════════════════════════
+       MOBILE NAV
+       ═══════════════════════════════════════════════════════ */
+    const toggle = document.getElementById('nav-toggle');
+    const links = document.getElementById('nav-links');
+    toggle.addEventListener('click', () => {
+      links.classList.toggle('open');
+      toggle.textContent = links.classList.contains('open') ? '✕' : '☰';
+    });
+    links.querySelectorAll('a').forEach(a => {
+      a.addEventListener('click', () => {
+        links.classList.remove('open');
+        toggle.textContent = '☰';
+      });
+    });
+
+    /* ═══════════════════════════════════════════════════════
+       TOGGLE MORE PROJECTS
+       ═══════════════════════════════════════════════════════ */
+    const toggleBtn = document.getElementById('toggle-projects');
+    const moreProjects = document.getElementById('more-projects');
+    if (toggleBtn && moreProjects) {
+      toggleBtn.addEventListener('click', () => {
+        const isOpen = moreProjects.style.display !== 'none';
+        moreProjects.style.display = isOpen ? 'none' : 'grid';
+        toggleBtn.textContent = isOpen ? '查看全部项目 ↓' : '收起项目 ↑';
+      });
+    }
+
+    /* ═══════════════════════════════════════════════════════
+       THEME TOGGLE (dark / light)
+       ═══════════════════════════════════════════════════════ */
+    const themeToggle = document.getElementById('theme-toggle');
+    const THEME_KEY = 'portfolio-theme';
+
+    function applyTheme(dark) {
+      document.body.classList.toggle('light', !dark);
+      try { localStorage.setItem(THEME_KEY, dark ? 'dark' : 'light'); } catch (_) {}
+    }
+
+    // Restore saved theme (default: light)
+    try {
+      const saved = localStorage.getItem(THEME_KEY);
+      applyTheme(saved === 'dark');
+    } catch (_) {
+      applyTheme(false); // default to light
+    }
+
+    themeToggle.addEventListener('click', () => {
+      const isLight = document.body.classList.contains('light');
+      applyTheme(isLight); // toggle
+    });
+
+    /* ═══════════════════════════════════════════════════════
+       SMOOTH SCROLL
+       ═══════════════════════════════════════════════════════ */
+    document.querySelectorAll('a[href^="#"]').forEach(a => {
+      a.addEventListener('click', e => {
+        e.preventDefault();
+        const target = document.querySelector(a.getAttribute('href'));
+        if (target) {
+          const y = target.getBoundingClientRect().top + window.scrollY - 72;
+          window.scrollTo({ top: y, behavior: 'smooth' });
+        }
+      });
+    });
+  </script>
+
+</body>
+</html>
